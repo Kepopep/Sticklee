@@ -1,3 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using TODO.Database;
+using TODO.Database.Repository;
+using TODO.Model;
+using TODO.Model.Enum;
+
 namespace TODO;
 
 public class Program
@@ -12,6 +18,9 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddDbContext<ApplicationDbContext>(options => 
+            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+        builder.Services.AddControllers();
 
         var app = builder.Build();
 
@@ -25,6 +34,7 @@ public class Program
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
+        app.MapControllers();
         
         app.Run();
     }
