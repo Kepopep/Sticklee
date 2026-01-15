@@ -12,8 +12,8 @@ using TODO.Infrastructure;
 namespace TODO.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260114101851_init")]
-    partial class init
+    [Migration("20260115083019_secondTry")]
+    partial class secondTry
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace TODO.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("TODO.Model.Habit", b =>
+            modelBuilder.Entity("TODO.Domain.Entities.Habit", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -43,24 +43,22 @@ namespace TODO.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Habits");
                 });
 
-            modelBuilder.Entity("TODO.Model.HabitLog", b =>
+            modelBuilder.Entity("TODO.Domain.Entities.HabitLog", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<bool>("Completed")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
 
                     b.Property<Guid>("HabitId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -70,44 +68,16 @@ namespace TODO.Migrations
                     b.ToTable("HabitLogs");
                 });
 
-            modelBuilder.Entity("TODO.Model.User", b =>
+            modelBuilder.Entity("TODO.Domain.Entities.HabitLog", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("TODO.Model.Habit", b =>
-                {
-                    b.HasOne("TODO.Model.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("TODO.Model.HabitLog", b =>
-                {
-                    b.HasOne("TODO.Model.Habit", "Habit")
+                    b.HasOne("TODO.Domain.Entities.Habit", null)
                         .WithMany("Logs")
                         .HasForeignKey("HabitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Habit");
                 });
 
-            modelBuilder.Entity("TODO.Model.Habit", b =>
+            modelBuilder.Entity("TODO.Domain.Entities.Habit", b =>
                 {
                     b.Navigation("Logs");
                 });

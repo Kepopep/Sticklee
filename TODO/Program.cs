@@ -1,8 +1,8 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using TODO.Database;
-using TODO.Database.Repository;
-using TODO.Model;
-using TODO.Model.Enum;
+using TODO.Application;
+using TODO.Domain.Entities;
+using TODO.Infrastructure;
 
 namespace TODO;
 
@@ -18,9 +18,25 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-        builder.Services.AddDbContext<ApplicationDbContext>(options => 
+        
+        builder.Services.AddDbContext<AppDbContext>(options => 
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+        builder.Services.AddDbContext<AppIdentityDbContext>(options => 
+            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+        
+        builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options => {
+            options.User.RequireUniqueEmail = true;
+            options.Password.RequiredLength = 3;
+        }). AddEntityFrameworkStores<AppIdentityDbContext>().
+            AddDefaultTokenProviders();
+        
+        builder.Services.AddApplicationServices();
+
+        builder.Services.AddAuthentication();
+        builder.Services.AddAuthorization();
+        
         builder.Services.AddControllers();
+
 
         var app = builder.Build();
 

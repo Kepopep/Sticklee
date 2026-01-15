@@ -1,0 +1,5 @@
+﻿namespace TODO.Application.Habit.GetById;
+
+public record GetHabitByIdDto(    
+    Guid UserId,
+    Guid HabitId);
