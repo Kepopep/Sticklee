@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using TODO.Application.HabitLog.Create;
+using TODO.Domain;
 using TODO.Domain.Entities;
 
 namespace TODO.Application.User.Delete;

@@ -3,8 +3,9 @@ using TODO.API.Requests;
 using TODO.Application.HabitLog;
 using TODO.Application.HabitLog.Create;
 using TODO.Application.HabitLog.Delete;
-using TODO.Application.HabitLog.Get;
 using TODO.Application.HabitLog.GetById;
+using TODO.Application.HabitLog.GetPaged;
+using TODO.Application.HabitLog.Update;
 
 namespace TODO.API.Controllers;
 
@@ -14,19 +15,22 @@ public class HabitLogsController : ControllerBase
 {
     private readonly ICreateHabitLogService _createHabitLogService;
     private readonly IGetHabitLogByIdService _getHabitLogByIdService;
-    private readonly IGetHabitLogService _getHabitLogService;
+    private readonly IGetHabitLogPagedService _getHabitLogPagedService;
     private readonly IDeleteHabitLogService _deleteHabitLogService;
+    private readonly IUpdateHabitLogService _updateHabitLogService;
 
     public HabitLogsController(
         ICreateHabitLogService createHabitLogService,
         IGetHabitLogByIdService getHabitLogByIdService,
-        IGetHabitLogService getHabitLogService,
-        IDeleteHabitLogService deleteHabitLogService)
+        IGetHabitLogPagedService getHabitLogPagedService,
+        IDeleteHabitLogService deleteHabitLogService,
+        IUpdateHabitLogService updateHabitLogService)
     {
         _createHabitLogService = createHabitLogService;
         _getHabitLogByIdService = getHabitLogByIdService;
-        _getHabitLogService = getHabitLogService;
+        _getHabitLogPagedService = getHabitLogPagedService;
         _deleteHabitLogService = deleteHabitLogService;
+        _updateHabitLogService = updateHabitLogService;
     }
 
     /// <summary>
@@ -71,12 +75,11 @@ public class HabitLogsController : ControllerBase
     }
 
     /// <summary>
-    /// Получает запись журнала привычки для пользователя
+    /// Получает все записи журнала привычки для пользователя
     /// </summary>
     [HttpGet]
     [ProducesResponseType(typeof(HabitLogDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Get([FromQuery] Guid habitLogId)
+    public async Task<IActionResult> GetPaged([FromQuery]GetHabitLogsPagedRequest request)
     {
         var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
@@ -84,10 +87,31 @@ public class HabitLogsController : ControllerBase
             return Unauthorized();
         }
 
-        var dto = new GetHabitLogServiceDto(userId, habitLogId);
-        var habitLog = await _getHabitLogService.ExecuteAsync(dto);
+        var dto = new GetHabitLogPagedServiceDto(userId, request.Page, request.PageSize);
+        var habitLog = await _getHabitLogPagedService.ExecuteAsync(dto);
 
         return Ok(habitLog);
+    }
+
+    /// <summary>
+    /// Обновляет запись журнала привычки по идентификатору
+    /// </summary>
+    [HttpPut("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateHabitLogRequest request)
+    {
+        var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+        {
+            return Unauthorized();
+        }
+
+        var dto = new UpdateHabitLogDto(userId, id, request.Date, request.HabitId);
+        await _updateHabitLogService.ExecuteAsync(dto);
+
+        return NoContent();
     }
 
     /// <summary>
