@@ -1,4 +1,4 @@
-﻿namespace TODO.Application.HabitLog.Create;
+﻿namespace TODO.Domain;
 
 public class DomainException : Exception
 {

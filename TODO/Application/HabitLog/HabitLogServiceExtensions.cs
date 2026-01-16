@@ -1,6 +1,9 @@
 ﻿using TODO.Application.HabitLog.Create;
 using TODO.Application.HabitLog.Delete;
 using TODO.Application.HabitLog.Get;
+using TODO.Application.HabitLog.GetById;
+using TODO.Application.HabitLog.GetPaged;
+using TODO.Application.HabitLog.Update;
 
 namespace TODO.Application.HabitLog;
 
@@ -11,6 +14,9 @@ public static class HabitLogServiceExtensions
     {
         services.AddScoped<ICreateHabitLogService, CreateHabitLogService>();
         services.AddScoped<IGetHabitLogService, GetHabitLogService>();
+        services.AddScoped<IGetHabitLogByIdService, GetHabitLogByIdService>();
+        services.AddScoped<IGetHabitLogPagedService, GetHabitLogPagedService>();
+        services.AddScoped<IUpdateHabitLogService, UpdateHabitLogService>();
         services.AddScoped<IDeleteHabitLogService, DeleteHabitLogService>();
 
         return services;
