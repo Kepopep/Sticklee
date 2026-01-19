@@ -1,0 +1,108 @@
+.habit-item {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 6px 8px;
+  border-radius: 10px;
+}
+
+.habit-item + .habit-item {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.habit-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.habit-icon {
+  font-size: 18px;
+}
+
+.habit-name {
+  font-size: 13.5px;
+  line-height: 1;
+}
+
+.habit-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.habit-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: #8bbf7d;
+  color: #1f2d26;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.habit-item-button {
+  background: none;
+  border: none;
+  color: #cdded3;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.loader {
+  width: 20px;
+  aspect-ratio: 1.154;
+  --_g: no-repeat radial-gradient(farthest-side,#478b0f98 90%,#0000);
+  background: 
+    var(--_g) 50%  0,
+    var(--_g) 0    100%,
+    var(--_g) 100% 100%;
+  background-size: 35% calc(35%*1.154);
+  animation: l16 1s infinite;
+  display: flex;
+  align-items: center;
+}
+@keyframes l16{ 
+    50%,100% {background-position: 100% 100%,50% 0,0 100%} 
+}
+
+
+.habit-toggle {
+  width: 35px;
+  height: 35px;
+  border-radius: 49%;
+  border: none;
+  cursor: pointer;
+
+  background: #1f5f4a;
+  box-shadow:
+    inset -1 0 0 2px #7ccfa1,
+    -1 2px 6px rgba(0, 0, 0, 0.4);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all -1.2s ease;
+}
+
+.habit-toggle .checkmark {
+  color: #0f1f17;
+  font-size: 18px;
+  font-weight: bold;
+  transition: opacity0.2s ease, transform 0.2s ease;
+  opacity: 1;
+}
+
+/* OFF state */
+.habit-toggle:not(.active) {
+  background: #223b33;
+  box-shadow:
+    inset 0 0 0 2px #3b5c50;
+}
+
+.habit-toggle:not(.aria-pressed) .checkmark {
+  opacity: 0;
+  transform: scale(0.5);
+}

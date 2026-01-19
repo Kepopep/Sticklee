@@ -41,13 +41,14 @@ public class HabitsController : ControllerBase
     [ProducesResponseType(typeof(HabitDto), StatusCodes.Status201Created)]
     public async Task<IActionResult> Create([FromBody] CreateHabitRequest request)
     {
-        var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
-        {
-            return Unauthorized();
-        }
+        // var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        // if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+        // {
+        //     return Unauthorized();
+        // }
         
-        var createRequest = new CreateHabitServiceDto(userId, request.Name, request.Frequency);
+        //var createRequest = new CreateHabitServiceDto(userId, request.Name, request.Frequency);
+        var createRequest = new CreateHabitServiceDto(Guid.Parse("d82b825f-40c3-4262-b367-55db930f0dc5"), request.Name, request.Frequency);
         var habit = await _createHabitService.ExecuteAsync(createRequest);
 
         return CreatedAtAction(
@@ -84,13 +85,14 @@ public class HabitsController : ControllerBase
     [ProducesResponseType(typeof(PagedResult<HabitDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPaged([FromQuery] GetHabitsPagedRequest request)
     {
-        var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
-        {
-            return Unauthorized();
-        }
+        var olegId = "d82b825f-40c3-4262-b367-55db930f0dc5";
+        //var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        //if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+        //{
+            //return Unauthorized();
+        //}
         
-        var dto = new GetHabitPagedServiceDto(userId, request.Page, request.PageSize);
+        var dto = new GetHabitPagedServiceDto(Guid.Parse(olegId), request.Page, request.PageSize);
         var habits = await _getHabitPagedService.ExecuteAsync(dto);
 
         return Ok(habits);
@@ -104,13 +106,14 @@ public class HabitsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateHabitRequest request)
     {
-        var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
-        {
-            return Unauthorized();
-        }
+        // var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        // if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+        // {
+        //     return Unauthorized();
+        // }
         
-        var updateDto = new UpdateHabitDto(userId, id, request.Name, request.Frequency);
+        var olegId = "d82b825f-40c3-4262-b367-55db930f0dc5";
+        var updateDto = new UpdateHabitDto(Guid.Parse(olegId), id, request.Name, request.Frequency);
         
         await _updateHabitService.ExecuteAsync(updateDto);
 

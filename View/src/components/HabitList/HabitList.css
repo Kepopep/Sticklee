@@ -1,0 +1,46 @@
+.habit-list-wrapper {
+  width: 420px;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #e6f0e6;
+}
+
+.habit-list-title {
+  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.habit-card {
+  background: rgba(40, 60, 50, 0.55);
+  backdrop-filter: blur(8px);
+  border-radius: 14px;
+  padding: 4px;
+}
+
+.habit-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.habit-menu {
+  background: none;
+  border: none;
+  color: #cdded3;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.habit-add-btn {
+  margin-top: 4px; 
+  padding: 6px;
+
+  font-size: 13px;
+  border-radius: 10px;
+
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.add-icon {
+  font-size: 16px;
+}
