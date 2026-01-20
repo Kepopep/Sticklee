@@ -1,0 +1,38 @@
+.habit-checkbox {
+  width: 32px; 
+  height: 32px; 
+  border-radius: 50%;
+  border: 2px solid #3b5c50; 
+  background: #223b33; 
+  color: #1f2d26;
+  font-size: 25px; 
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 0.2s ease; 
+}
+
+.habit-checkbox.active {
+  background: #8bbf7d; 
+  transition: all 0.2s ease; 
+}
+
+.habit-checkbox .checkmark {
+  color: #1f2d26;
+  font-weight: bold;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  opacity: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.habit-checkbox:hover {
+  transform: scale(1.05); 
+  outline: 2px solid #7ccfa1;
+  outline-offset: 2px;
+  transition: all 0.2s ease-in-out;
+}
