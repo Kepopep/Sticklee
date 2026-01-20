@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { HabitDto, HabitRenameRequest } from '../api/habits/habits.types';
 import { HabitCheackbox } from './HabitCheackbox';
+import { HabitEdit } from './HabitEdit';
 
 type Props = {
   habit: HabitDto;
@@ -39,15 +40,13 @@ export function HabitItem({ habit, onRenameSave }: Props) {
       {isUpdating ? (
         <div className='loader'/>
       ) : isEditing ? (
-        <>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <button className="habit-item-button" onClick={saveEdit}>✔️</button>
-          <button className="habit-item-button" onClick={cancelEdit}>❌</button>
-        </>
+        <HabitEdit 
+          initialValue = {name}
+          onSave={(name) => {
+            console.log(name);
+            setIsEditing(false);
+          }}
+          onCancel={() => setIsEditing(false)}/>
       ) : (
         <>
           <HabitCheackbox onClick={(isCliced) => console.log(isCliced)} />
