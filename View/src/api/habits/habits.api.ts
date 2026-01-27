@@ -70,3 +70,13 @@ export async function checkHabit(habitCheckRequest: HabitCheckRequest) {
         throw new Error('Failed to update habit check status');
     }
 }
+
+export async function deleteHabit(habitId: string) {
+    const response = await fetch(`/api/habits/${habitId}`, {
+        method: 'DELETE'
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to delete habit');
+    }
+}

@@ -8,9 +8,10 @@ type Props = {
     onAddClick: () => void;
     onRenameSave: (renameRequest: HabitRenameRequest) => void;
     onChecked: (habitId: string, isActive: boolean) => void;
+    onDelete: (habitId: string) => void;
 }
 
-export function HabitList({ habits, onAddClick, onRenameSave, onChecked} : Props) {
+export function HabitList({ habits, onAddClick, onRenameSave, onChecked, onDelete} : Props) {
     const [editingHabitId, setEditingHabitId] = useState<string | null>(null);
 
     if(habits.length === 0)
@@ -31,6 +32,7 @@ export function HabitList({ habits, onAddClick, onRenameSave, onChecked} : Props
                         onEditEnd={() => setEditingHabitId(null)}
                         onRenameSave={onRenameSave}
                         onChecked={onChecked}
+                        onDelete={onDelete}
                     />
                 ))}
                 </ul>

@@ -3,7 +3,7 @@ import "../components/style/HabitItem.css";
 import '../components/style/HabitCheackbox.css'
 
 import { useEffect, useState } from "react";
-import { checkHabit, createHabit, getHabits, updateHabitName} from "../api/habits/habits.api";
+import { checkHabit, createHabit, deleteHabit, getHabits, updateHabitName} from "../api/habits/habits.api";
 import { HabitList } from "../components/HabitList";
 
 import type { HabitDto, HabitRenameRequest, HabitCheckRequest } from "../api/habits/habits.types";
@@ -61,11 +61,21 @@ export function HabitPage() {
         }
     };
 
+    const handleDelete = async (habitId: string) => {
+        try {
+            await deleteHabit(habitId);
+            await loadHabits(); // Refresh the list after deletion
+        } catch (error) {
+            console.error('Failed to delete habit:', error);
+            // Optionally show an error message to the user
+        }
+    };
+
     if(isLoading) 
         return <div>Loading...</div>
 
     if(error)
         return <div>{error}</div>
 
-    return <HabitList habits={habits} onAddClick={addHabit} onRenameSave={updateName} onChecked={habitChecked}/>
+    return <HabitList habits={habits} onAddClick={addHabit} onRenameSave={updateName} onChecked={habitChecked} onDelete={handleDelete}/>
 }
