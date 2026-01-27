@@ -131,13 +131,14 @@ public class HabitsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
-        {
-            return Unauthorized();
-        }
+        // var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        // if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+        // {
+        //     return Unauthorized();
+        // }
         
-        var dto = new DeleteHabitServiceDto(userId, id);
+        var olegId = "d82b825f-40c3-4262-b367-55db930f0dc5";
+        var dto = new DeleteHabitServiceDto(Guid.Parse(olegId), id);
 
         await _deleteHabitService.ExecuteAsync(dto);
 
