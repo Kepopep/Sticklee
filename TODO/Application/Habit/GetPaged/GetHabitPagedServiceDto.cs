@@ -3,4 +3,5 @@
 public record GetHabitPagedServiceDto(    
     Guid UserId,
     int Page,
-    int PageSize);
+    int PageSize,
+    DateOnly Date);

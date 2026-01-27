@@ -20,4 +20,5 @@ export type HabitRenameRequest = {
 export type HabitCheckRequest = {
     id: string;
     isChecked: boolean;
+    date: Date
 }

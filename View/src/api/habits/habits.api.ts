@@ -1,10 +1,16 @@
 import type { HabitCheckRequest, HabitCreateRequest, HabitDto, HabitRenameRequest } from './habits.types';
 
-export async function getHabits() : Promise<HabitDto[]> {
-    const response = await fetch(`/api/habits?${{
+export async function getHabits(date: Date) : Promise<HabitDto[]> {
+    console.log(" wwwwwwwwwwwwww " + date.toString());
+    let params = new URLSearchParams({
         page: '1',
-        pageSize: '10'
-    }}`);
+        pageSize: '10',
+        date: date.toLocaleDateString('en-CA')
+    });
+    console.log(params.toString());
+    const response = await fetch(`/api/habits?${params}`, {
+        method: 'GET'
+    });
 
     if(!response.ok) {
         throw new Error('Failed to fetch habits');
@@ -53,8 +59,6 @@ export async function updateHabitName(renameRequest: HabitRenameRequest) {
 }
 
 export async function checkHabit(habitCheckRequest: HabitCheckRequest) {
-    let day = new Date();
-
     const response = await fetch(`/api/habits/${habitCheckRequest.id}/check`, {
         method: 'PUT',
         headers: {
@@ -62,7 +66,7 @@ export async function checkHabit(habitCheckRequest: HabitCheckRequest) {
         },
         body: JSON.stringify({
             isChecked: habitCheckRequest.isChecked,
-            date: new Date().toISOString().split('T')[0]
+            date: habitCheckRequest.date.toLocaleDateString('en-CA')
         })
     });
 

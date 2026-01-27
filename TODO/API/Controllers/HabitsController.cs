@@ -96,7 +96,7 @@ public class HabitsController : ControllerBase
             //return Unauthorized();
         //}
         
-        var dto = new GetHabitPagedServiceDto(Guid.Parse(olegId), request.Page, request.PageSize);
+        var dto = new GetHabitPagedServiceDto(Guid.Parse(olegId), request.Page, request.PageSize, request.Date);
         var habits = await _getHabitPagedService.ExecuteAsync(dto);
 
         return Ok(habits);

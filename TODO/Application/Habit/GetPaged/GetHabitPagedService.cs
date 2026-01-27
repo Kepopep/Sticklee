@@ -47,7 +47,8 @@ public class GetHabitPagedService : IGetHabitPagedService
         var completedHabitsIds = await _dbContext.HabitLogs
             .AsNoTracking()
             .Where(l => l.UserId == dto.UserId && 
-                habitsId.Contains(l.HabitId))
+                habitsId.Contains(l.HabitId) && 
+                l.Date == dto.Date)
             .Select(h => h.HabitId)
             .Distinct()
             .ToListAsync();

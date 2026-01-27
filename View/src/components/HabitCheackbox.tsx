@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
   habitId: string;
@@ -10,6 +10,10 @@ type Props = {
 export function HabitCheackbox({ habitId, initialChecked = false, onCheckChange } : Props) {
   const [isChecked, setIsChecked] = useState(initialChecked);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsChecked(initialChecked);
+  }, [initialChecked]);
 
   const handleClick = async () => {
     // Prevent multiple clicks during API call

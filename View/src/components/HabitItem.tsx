@@ -46,7 +46,7 @@ export function HabitItem({ habit, isEditing = false, onEditStart, onEditEnd, on
           }}/>
       ) : (
         <>
-          <HabitCheackbox 
+          <HabitCheackbox
             habitId={habit.id} 
             initialChecked={habit.isChecked} 
             onCheckChange={(checked) => onChecked(habit.id, checked)}/>
