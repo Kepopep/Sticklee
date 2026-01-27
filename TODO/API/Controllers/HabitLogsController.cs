@@ -5,6 +5,7 @@ using TODO.Application.HabitLog.Create;
 using TODO.Application.HabitLog.Delete;
 using TODO.Application.HabitLog.GetById;
 using TODO.Application.HabitLog.GetPaged;
+using TODO.Application.HabitLog.GetDay;
 using TODO.Application.HabitLog.Update;
 
 namespace TODO.API.Controllers;
@@ -16,6 +17,7 @@ public class HabitLogsController : ControllerBase
     private readonly ICreateHabitLogService _createHabitLogService;
     private readonly IGetHabitLogByIdService _getHabitLogByIdService;
     private readonly IGetHabitLogPagedService _getHabitLogPagedService;
+    private readonly IGetHabitLogByDayService _getHabitLogByDayService;
     private readonly IDeleteHabitLogService _deleteHabitLogService;
     private readonly IUpdateHabitLogService _updateHabitLogService;
 
@@ -23,12 +25,14 @@ public class HabitLogsController : ControllerBase
         ICreateHabitLogService createHabitLogService,
         IGetHabitLogByIdService getHabitLogByIdService,
         IGetHabitLogPagedService getHabitLogPagedService,
+        IGetHabitLogByDayService getHabitLogByDayService,
         IDeleteHabitLogService deleteHabitLogService,
         IUpdateHabitLogService updateHabitLogService)
     {
         _createHabitLogService = createHabitLogService;
         _getHabitLogByIdService = getHabitLogByIdService;
         _getHabitLogPagedService = getHabitLogPagedService;
+        _getHabitLogByDayService = getHabitLogByDayService;
         _deleteHabitLogService = deleteHabitLogService;
         _updateHabitLogService = updateHabitLogService;
     }
@@ -91,6 +95,25 @@ public class HabitLogsController : ControllerBase
         var habitLog = await _getHabitLogPagedService.ExecuteAsync(dto);
 
         return Ok(habitLog);
+    }
+
+    /// <summary>
+    /// Получает все записи журнала привычек для пользователя за конкретный день
+    /// </summary>
+    [HttpGet("day/{date}")]
+    [ProducesResponseType(typeof(List<HabitLogDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetByDay(DateOnly date)
+    {
+        var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+        {
+            return Unauthorized();
+        }
+
+        var dto = new GetHabitLogByDayServiceDto(userId, date);
+        var habitLogs = await _getHabitLogByDayService.ExecuteAsync(dto);
+
+        return Ok(habitLogs);
     }
 
     /// <summary>

@@ -5,4 +5,5 @@ namespace TODO.Application.Habit.Check;
 public record CheckHabitDto(
     Guid UserId,
     Guid HabitId,
+    DateOnly Date,
     bool IsChecked);

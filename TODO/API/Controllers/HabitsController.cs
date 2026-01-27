@@ -159,7 +159,7 @@ public class HabitsController : ControllerBase
         // }
 
         var olegId = "d82b825f-40c3-4262-b367-55db930f0dc5";
-        var dto = new CheckHabitDto(Guid.Parse(olegId), habitId, request.IsChecked);
+        var dto = new CheckHabitDto(Guid.Parse(olegId), habitId, request.Date, request.IsChecked);
         await _checkHabitStatusService.ExecuteAsync(dto);
 
         return NoContent();

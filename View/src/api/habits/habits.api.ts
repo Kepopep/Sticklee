@@ -53,13 +53,16 @@ export async function updateHabitName(renameRequest: HabitRenameRequest) {
 }
 
 export async function checkHabit(habitCheckRequest: HabitCheckRequest) {
+    let day = new Date();
+
     const response = await fetch(`/api/habits/${habitCheckRequest.id}/check`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            isChecked: habitCheckRequest.isChecked
+            isChecked: habitCheckRequest.isChecked,
+            date: new Date().toISOString().split('T')[0]
         })
     });
 
