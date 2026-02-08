@@ -8,22 +8,25 @@ public class CheckHabitService : ICheckHabitService
 {
     private readonly ICreateHabitLogService _createHabitLogService;
     private readonly IGetHabitLogByDayService _getHabitLogByDayService;
+    private readonly IUserContext _userContext;
     private readonly IDeleteHabitLogService _deleteHabitLogService;
 
     public CheckHabitService(
         ICreateHabitLogService createHabitLogService,
         IDeleteHabitLogService deleteHabitLogService,
-        IGetHabitLogByDayService getHabitLogByDayService)
+        IGetHabitLogByDayService getHabitLogByDayService,
+        IUserContext userContext)
     {
         _createHabitLogService = createHabitLogService;
         _deleteHabitLogService = deleteHabitLogService;
         _getHabitLogByDayService = getHabitLogByDayService;
+        _userContext = userContext;
     }
 
     public async Task ExecuteAsync(CheckHabitDto dto)
     {
         var existingLogs = await _getHabitLogByDayService.ExecuteAsync(
-            new GetHabitLogByDayServiceDto(dto.UserId, dto.Date));
+            new GetHabitLogByDayServiceDto(_userContext.UserId, dto.Date));
 
         if(existingLogs.Count(l => l.HabitId == dto.HabitId) != 0 == dto.IsChecked)
         {
@@ -37,7 +40,7 @@ public class CheckHabitService : ICheckHabitService
         else
         {
             var deleteDto = new DeleteHabitLogServiceDto(
-                dto.UserId, 
+                _userContext.UserId, 
                 existingLogs.First(l => l.HabitId == dto.HabitId).Id);
             await DeleteLog(deleteDto);
         }
@@ -52,6 +55,6 @@ public class CheckHabitService : ICheckHabitService
     private async Task CreateLog(CheckHabitDto dto)
     {
         var createDto = new CreateHabitLogDto(dto.HabitId, dto.Date);
-        await _createHabitLogService.ExecuteAsync(dto.UserId, createDto);
+        await _createHabitLogService.ExecuteAsync(_userContext.UserId, createDto);
     }
 }

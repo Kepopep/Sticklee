@@ -9,18 +9,20 @@ public class CreateHabitService : ICreateHabitService
 {
     private readonly AppDbContext _dbContext;
     private readonly AppIdentityDbContext _identityDbContext;
+    private readonly IUserContext _userContext;
 
-    public CreateHabitService(AppDbContext dbContext, AppIdentityDbContext identityDbContext)
+    public CreateHabitService(AppDbContext dbContext, AppIdentityDbContext identityDbContext, IUserContext userContext)
     {
         _dbContext = dbContext;
         _identityDbContext = identityDbContext;
+        _userContext = userContext;
     }
     
     public async Task<HabitDto> ExecuteAsync(CreateHabitServiceDto dto)
     {
         // 1. Проверка пользователя (минимальная)
         var userExists = await _identityDbContext.Set<ApplicationUser>().
-            AnyAsync(u => u.Id == dto.UserId);
+            AnyAsync(u => u.Id == _userContext.UserId);
 
         if (!userExists)
         {
@@ -29,7 +31,7 @@ public class CreateHabitService : ICreateHabitService
 
         // 2. Создание доменной сущности
         var habit = new Domain.Entities.Habit(
-            dto.UserId,
+            _userContext.UserId,
             dto.Name,
             dto.Frequency);
 

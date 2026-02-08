@@ -48,7 +48,7 @@ public class HabitsController : ControllerBase
     [ProducesResponseType(typeof(HabitDto), StatusCodes.Status201Created)]
     public async Task<IActionResult> Create([FromBody] CreateHabitRequest request)
     {
-        var createRequest = new CreateHabitServiceDto(_userContext.UserId, request.Name, request.Frequency);
+        var createRequest = new CreateHabitServiceDto(request.Name, request.Frequency);
         var habit = await _createHabitService.ExecuteAsync(createRequest);
 
         return CreatedAtAction(
@@ -65,7 +65,7 @@ public class HabitsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var habit = await _getHabitByIdService.ExecuteAsync(new GetHabitByIdDto(_userContext.UserId, id));
+        var habit = await _getHabitByIdService.ExecuteAsync(new GetHabitByIdDto(id));
 
         //TODO add not found exeption
 
@@ -79,7 +79,7 @@ public class HabitsController : ControllerBase
     [ProducesResponseType(typeof(PagedResult<HabitDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPaged([FromQuery] GetHabitsPagedRequest request)
     {
-        var dto = new GetHabitPagedServiceDto(_userContext.UserId, request.Page, request.PageSize, request.Date);
+        var dto = new GetHabitPagedServiceDto(request.Page, request.PageSize, request.Date);
         var habits = await _getHabitPagedService.ExecuteAsync(dto);
 
         return Ok(habits);
@@ -93,7 +93,7 @@ public class HabitsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateHabitRequest request)
     {
-        var updateDto = new UpdateHabitDto(_userContext.UserId, id, request.Name, request.Frequency);
+        var updateDto = new UpdateHabitDto(id, request.Name, request.Frequency);
         
         await _updateHabitService.ExecuteAsync(updateDto);
 
@@ -107,7 +107,7 @@ public class HabitsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var dto = new DeleteHabitServiceDto(_userContext.UserId, id);
+        var dto = new DeleteHabitServiceDto(id);
 
         await _deleteHabitService.ExecuteAsync(dto);
 
@@ -122,7 +122,7 @@ public class HabitsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CheckStatus(Guid habitId, [FromBody] CheckHabitRequest request)
     {
-        var dto = new CheckHabitDto(_userContext.UserId, habitId, request.Date, request.IsChecked);
+        var dto = new CheckHabitDto(habitId, request.Date, request.IsChecked);
         await _checkHabitStatusService.ExecuteAsync(dto);
 
         return NoContent();

@@ -8,10 +8,12 @@ namespace TODO.Application.Habit.GetById;
 public class GetHabitByIdService : IGetHabitByIdService
 {
     private readonly AppDbContext _dbContext;
+    private readonly IUserContext _userContext;
 
-    public GetHabitByIdService(AppDbContext dbContext)
+    public GetHabitByIdService(AppDbContext dbContext, IUserContext userContext)
     {
         _dbContext = dbContext;
+        _userContext = userContext;
     }
 
     public async Task<HabitDto> ExecuteAsync(GetHabitByIdDto dto)
@@ -20,7 +22,7 @@ public class GetHabitByIdService : IGetHabitByIdService
         var habit = await _dbContext.Habits
             .AsNoTracking()
             .FirstOrDefaultAsync(h =>
-                h.UserId == dto.UserId &&
+                h.UserId == _userContext.UserId &&
                 h.Id == dto.HabitId);
 
         // Шаг 2. Проверка существования

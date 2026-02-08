@@ -8,10 +8,12 @@ namespace TODO.Application.Habit.Update;
 public class UpdateHabitService : IUpdateHabitService
 {
     private readonly AppDbContext _dbContext;
+    private readonly IUserContext _userContext;
 
-    public UpdateHabitService(AppDbContext dbContext)
+    public UpdateHabitService(AppDbContext dbContext, IUserContext userContext)
     {
         _dbContext = dbContext;
+        _userContext = userContext;
     }
 
     public async Task ExecuteAsync(UpdateHabitDto dto)
@@ -20,7 +22,7 @@ public class UpdateHabitService : IUpdateHabitService
         var habit = await _dbContext.Habits
             .FirstOrDefaultAsync(h =>
                 h.Id == dto.HabitId &&
-                h.UserId == dto.UserId);
+                h.UserId == _userContext.UserId);
 
         // Шаг 2. Проверка доступа и существования
         if (habit is null)

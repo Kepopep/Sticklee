@@ -8,10 +8,12 @@ namespace TODO.Application.Habit.Delete;
 public class DeleteHabitService : IDeleteHabitService
 {
     private readonly AppDbContext _dbContext;
+    private readonly IUserContext _userContext;
 
-    public DeleteHabitService(AppDbContext dbContext)
+    public DeleteHabitService(AppDbContext dbContext, IUserContext userContext)
     {
         _dbContext = dbContext;
+        _userContext = userContext;
     }
 
     public async Task ExecuteAsync(DeleteHabitServiceDto dto)
@@ -20,7 +22,7 @@ public class DeleteHabitService : IDeleteHabitService
         var habit = await _dbContext.Habits
             .FirstOrDefaultAsync(h =>
                 h.Id == dto.HabitId &&
-                h.UserId == dto.UserId);
+                h.UserId == _userContext.UserId);
 
         // Шаг 2. Проверка существования и доступа
         if (habit is null)

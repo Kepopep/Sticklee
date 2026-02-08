@@ -8,10 +8,12 @@ public class GetHabitPagedService : IGetHabitPagedService
     private const int MaxPageSize = 50;
     private const int MinPageSize = 10;
     private readonly AppDbContext _dbContext;
+    private readonly IUserContext _userContext;
 
-    public GetHabitPagedService(AppDbContext dbContext)
+    public GetHabitPagedService(AppDbContext dbContext, IUserContext context)
     {
         _dbContext = dbContext;
+        _userContext = context;
     }
 
     public async Task<PagedResult<HabitDto>> ExecuteAsync(GetHabitPagedServiceDto dto)
@@ -19,6 +21,7 @@ public class GetHabitPagedService : IGetHabitPagedService
         // Шаг 1. Нормализация пагинации
         var page = dto.Page < 1 ? 1 : dto.Page;
         var pageSize = dto.PageSize <= 0 ? MinPageSize : dto.PageSize;
+        var userId = _userContext.UserId;
 
         if (pageSize > MaxPageSize)
             pageSize = MaxPageSize;
@@ -26,7 +29,7 @@ public class GetHabitPagedService : IGetHabitPagedService
         // Шаг 2. Базовый IQueryable
         var query = _dbContext.Habits
             .AsNoTracking()
-            .Where(h => h.UserId == dto.UserId)
+            .Where(h => h.UserId == userId)
             .OrderBy(h => h.Id);
 
         // Шаг 3. Запрос страницы + 1 элемент
@@ -46,7 +49,7 @@ public class GetHabitPagedService : IGetHabitPagedService
 
         var completedHabitsIds = await _dbContext.HabitLogs
             .AsNoTracking()
-            .Where(l => l.UserId == dto.UserId && 
+            .Where(l => l.UserId == userId && 
                 habitsId.Contains(l.HabitId) && 
                 l.Date == dto.Date)
             .Select(h => h.HabitId)
