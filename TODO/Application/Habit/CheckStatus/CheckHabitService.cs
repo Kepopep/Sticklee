@@ -1,9 +1,6 @@
-using System.Data;
-using TODO.Application.HabitLog;
 using TODO.Application.HabitLog.Create;
 using TODO.Application.HabitLog.Delete;
 using TODO.Application.HabitLog.GetDay;
-using TODO.Application.HabitLog.GetPaged;
 
 namespace TODO.Application.Habit.Check;
 
@@ -13,8 +10,6 @@ public class CheckHabitService : ICheckHabitService
     private readonly IGetHabitLogByDayService _getHabitLogByDayService;
     private readonly IDeleteHabitLogService _deleteHabitLogService;
 
-    private readonly DateOnly _currentDate;
-
     public CheckHabitService(
         ICreateHabitLogService createHabitLogService,
         IDeleteHabitLogService deleteHabitLogService,
@@ -23,8 +18,6 @@ public class CheckHabitService : ICheckHabitService
         _createHabitLogService = createHabitLogService;
         _deleteHabitLogService = deleteHabitLogService;
         _getHabitLogByDayService = getHabitLogByDayService;
-
-        _currentDate = DateOnly.FromDateTime(DateTime.Now);
     }
 
     public async Task ExecuteAsync(CheckHabitDto dto)

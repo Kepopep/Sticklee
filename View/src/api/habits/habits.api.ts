@@ -1,7 +1,6 @@
 import type { HabitCheckRequest, HabitCreateRequest, HabitDto, HabitRenameRequest } from './habits.types';
 
 export async function getHabits(date: Date) : Promise<HabitDto[]> {
-    console.log(" wwwwwwwwwwwwww " + date.toString());
     let params = new URLSearchParams({
         page: '1',
         pageSize: '10',
