@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TODO.Application.Exceptions;
 using TODO.Application.HabitLog.Create;
 using TODO.Domain;
 using TODO.Infrastructure;
@@ -27,7 +28,7 @@ public class UpdateHabitService : IUpdateHabitService
         // Шаг 2. Проверка доступа и существования
         if (habit is null)
         {
-            throw new DomainException("Habit not found");
+            throw new NotFoundException("Habit not found");
         }
 
         // Шаг 3. Обновление состояния доменной сущности

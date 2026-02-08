@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TODO.Application.HabitLog.Create;
-using TODO.Domain;
+using TODO.Application.Exceptions;
 using TODO.Infrastructure;
 
 namespace TODO.Application.Habit.GetById;
@@ -28,7 +27,7 @@ public class GetHabitByIdService : IGetHabitByIdService
         // Шаг 2. Проверка существования
         if (habit is null)
         {
-            throw new DomainException("Habit not found");
+            throw new NotFoundException("Habit not found");
         }
 
         // Шаг 3. Маппинг в DTO

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TODO.Domain;
+using TODO.Application.Exceptions;
 using TODO.Domain.Entities;
 using TODO.Infrastructure;
 
@@ -26,7 +26,7 @@ public class CreateHabitService : ICreateHabitService
 
         if (!userExists)
         {
-            throw new DomainException("User not found");
+            throw new NotFoundException("User not found");
         }
 
         // 2. Создание доменной сущности

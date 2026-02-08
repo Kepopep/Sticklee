@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TODO.Domain;
+using TODO.Application.Exceptions;
 using TODO.Infrastructure;
 
 namespace TODO.Application.HabitLog.Create;
@@ -30,8 +30,9 @@ public class CreateHabitLogService : ICreateHabitLogService
             l.Date == dto.Date);
 
         if (alreadyLogged)
-            throw new DomainException(
-                "Habit already logged for this date");
+        {
+            throw new DomainException("Habit already logged for this date");
+        }
 
         // 3. Создаём domain-объект
         var log = new Domain.Entities.HabitLog(

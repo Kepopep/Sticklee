@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TODO.Application.HabitLog.Create;
-using TODO.Domain;
+using TODO.Application.Exceptions;
 using TODO.Infrastructure;
 
 namespace TODO.Application.Habit.Delete;
@@ -26,7 +25,9 @@ public class DeleteHabitService : IDeleteHabitService
 
         // Шаг 2. Проверка существования и доступа
         if (habit is null)
-            throw new DomainException("Habit not found");
+        {
+            throw new NotFoundException("Habit not found");
+        }
 
         // Шаг 3. Удаление
         _dbContext.Habits.Remove(habit);
