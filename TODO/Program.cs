@@ -36,10 +36,11 @@ public class Program
         
         builder.Services.AddApplicationServices();
 
-        builder.Services.AddScoped<IUserContext, FakeUserContext>();
         builder.Services.AddScoped<IJwtTokenFactory, JwtTokenFactory>();
 
         builder.Services.AddAuthentication();
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddScoped<IUserContext, UserContext>();
         builder.Services.AddAuthorization();
         
         builder.Services.AddControllers();
