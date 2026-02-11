@@ -1,4 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using TODO.Application.Exceptions;
 
@@ -12,7 +11,7 @@ public class UserContext : IUserContext
     {
         get
         {
-            var value = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value
+            var value = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
                         ?? throw new UnauthorizedException("UserId claim missing");
 
             return Guid.Parse(value);

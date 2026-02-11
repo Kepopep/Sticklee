@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -37,7 +38,15 @@ public class Program
         }).AddEntityFrameworkStores<AppIdentityDbContext>().
             AddDefaultTokenProviders();
 
+        builder.Services.Configure<IdentityOptions>(options =>
+        {
+            options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
+        });
+
         builder.Services.AddApplicationServices();
+
+        builder.Services.AddScoped<IUserContext, UserContext>();
+
         builder.Services.AddHttpContextAccessor();
 
         builder.Services
@@ -69,7 +78,6 @@ public class Program
             });
 
 
-        builder.Services.AddScoped<IUserContext, UserContext>();
         builder.Services.AddAuthorization();
 
         builder.Services.AddControllers();
